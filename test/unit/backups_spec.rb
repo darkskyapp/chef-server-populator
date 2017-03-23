@@ -12,11 +12,11 @@ describe 'chef-server-populator::backups' do
 
   let(:chef_run) do
     ChefSpec::SoloRunner.new(:platform => 'ubuntu', :version => '14.04') do |node|
-      node.set['chef_server_populator']['backup']['dir'] = data_dir
-      node.set['chef_server_populator']['configuration_directory'] = config_dir
-      node.set['chef_server_populator']['backup_gems'] = gems
-      node.set['chef_server_populator']['backup']['schedule'] = backup_schedule
-      node.set['chef_server_populator']['backup']['remote']['connection'] = {}
+      node.default['chef_server_populator']['backup']['dir'] = data_dir
+      node.default['chef_server_populator']['configuration_directory'] = config_dir
+      node.default['chef_server_populator']['backup_gems'] = gems
+      node.default['chef_server_populator']['backup']['schedule'] = backup_schedule
+      node.default['chef_server_populator']['backup']['remote']['connection'] = {}
     end.converge(described_recipe)
   end
 
@@ -30,7 +30,7 @@ describe 'chef-server-populator::backups' do
 
   it 'installs platform-specific build dependencies for transmitting backup data to a remote service' do
     centos_chef_run = ChefSpec::SoloRunner.new(:platform => 'centos', :version => '6.5') do |node|
-      node.set['chef_server_populator']['backup']['remote']['connection'] = {}
+      node.default['chef_server_populator']['backup']['remote']['connection'] = {}
     end.converge(described_recipe)
 
     apt_packages.each do |pkg|

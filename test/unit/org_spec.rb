@@ -31,9 +31,9 @@ describe 'chef-server-populator::org' do
 
   let(:chef_run) {
     ChefSpec::ServerRunner.new do |node, _server|
-      node.set['chef_server_populator']['solo_org'] = test_org
-      node.set['chef_server_populator']['solo_org_user'] = test_org_user
-      node.set['chef_server_populator']['default_org'] = default_org
+      node.override['chef_server_populator']['solo_org'] = test_org
+      node.override['chef_server_populator']['solo_org_user'] = test_org_user
+      node.override['chef_server_populator']['default_org'] = default_org
     end.converge(described_recipe)
   }
 
@@ -82,7 +82,7 @@ describe 'chef-server-populator::org' do
 
     context 'when the populator org is also the default org' do
       it 'notifies chef-server to reconfigure immediately' do
-        chef_run.node.set['chef_server_populator']['default_org'] = test_org[:org_name]
+        chef_run.node.override['chef_server_populator']['default_org'] = test_org[:org_name]
         chef_run.converge(described_recipe)
         expect(execute_create_populator_org).to notify('execute[reconfigure for populator org create]').to(:run).immediately
       end
