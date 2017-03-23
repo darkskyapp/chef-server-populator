@@ -60,6 +60,7 @@ describe 'chef-server-populator::client' do
 
   let(:chef_run) do
     ChefSpec::ServerRunner.new do |node, server|
+      node.automatic['memory']['total'] = '2048000kB'
       node.default['chef_server_populator']['databag'] = populator_data_bag
       server.create_data_bag(populator_data_bag, {
         test_user_name => test_user_item,

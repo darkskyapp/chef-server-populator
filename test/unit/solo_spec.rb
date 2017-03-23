@@ -33,6 +33,7 @@ describe 'chef-server-populator::solo' do
 
   let(:chef_run) do
     ChefSpec::SoloRunner.new do |node|
+      node.automatic['memory']['total'] = '2048000kB'
       node.override['chef_server_populator']['server_org'] = server_org
       node.override['chef_server_populator']['default_org'] = default_org
       node.override['chef_server_populator']['solo_org']['endurance'] = test_org
