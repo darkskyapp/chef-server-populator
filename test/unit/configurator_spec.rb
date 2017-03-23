@@ -8,6 +8,7 @@ describe 'chef-server-populator::configurator' do
   let(:chef_run) {
     ChefSpec::SoloRunner.new do |node|
       node.automatic['fqdn'] = fqdn
+      node.automatic['memory']['total'] = '2048000kB'
       node.override['chef_server_populator']['chef_server']['version'] = '12.0.5'
       node.override['chef_server_populator']['chef_server']['foo'] = 'bar'
     end.converge(described_recipe)

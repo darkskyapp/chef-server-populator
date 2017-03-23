@@ -31,6 +31,7 @@ describe 'chef-server-populator::org' do
 
   let(:chef_run) {
     ChefSpec::ServerRunner.new do |node, _server|
+      node.automatic['memory']['total'] = '2048000kB'
       node.override['chef_server_populator']['solo_org']['endurance'] = test_org
       node.override['chef_server_populator']['solo_org_user'] = test_org_user
       node.override['chef_server_populator']['default_org'] = default_org
