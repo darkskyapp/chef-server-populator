@@ -8,10 +8,15 @@ end
 
 directory '/tmp/chef-server-populator'
 
-%w(client_key.pem client_key_pub.pem validator.pem validator_pub.pem user_key.pem user_pub.pem).each do |file|
-
+%w(
+  client_key.pem
+  client_key_pub.pem
+  validator.pem
+  validator_pub.pem
+  user_key.pem
+  user_pub.pem
+).each do |file|
   cookbook_file file do
     path "/tmp/chef-server-populator/#{file}"
   end
-
 end
