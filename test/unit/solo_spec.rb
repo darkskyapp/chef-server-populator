@@ -33,10 +33,10 @@ describe 'chef-server-populator::solo' do
 
   let(:chef_run) do
     ChefSpec::SoloRunner.new do |node|
-      node.set[:chef_server_populator][:server_org] = server_org
-      node.set[:chef_server_populator][:default_org] = default_org
-      node.set[:chef_server_populator][:solo_org] = test_org
-      node.set[:chef_server_populator][:solo_org_user] = test_org_user
+      node.set['chef_server_populator']['server_org'] = server_org
+      node.set['chef_server_populator']['default_org'] = default_org
+      node.set['chef_server_populator']['solo_org'] = test_org
+      node.set['chef_server_populator']['solo_org_user'] = test_org_user
     end.converge(described_recipe)
   end
 
@@ -62,12 +62,12 @@ describe 'chef-server-populator::solo' do
   context 'without a default_org specified' do
 
     before do
-      chef_run.node.set[:chef_server_populator][:default_org] = nil
+      chef_run.node.set['chef_server_populator']['default_org'] = nil
       chef_run.converge(described_recipe)
     end
 
     it 'assigns the server_org as the default org' do
-      expect(chef_run.node[:chef_server_populator][:default_org]).to eq(server_org)
+      expect(chef_run.node['chef_server_populator']['default_org']).to eq(server_org)
     end
 
   end
@@ -88,7 +88,7 @@ describe 'chef-server-populator::solo' do
   #
 
   it 'overrides the chef-server default_orgname' do
-    expect(chef_run.node['chef-server'][:configuration]).to include(default_org)
+    expect(chef_run.node['chef-server']['configuration']).to include(default_org)
   end
 
   it 'creates the populator user' do
@@ -97,12 +97,12 @@ describe 'chef-server-populator::solo' do
 
   context 'with a specified endpoint' do
     before do
-      chef_run.node.set[:chef_server_populator][:endpoint] = endpoint
+      chef_run.node.set['chef_server_populator']['endpoint'] = endpoint
       chef_run.converge(described_recipe)
     end
 
     it 'overrides the chef server endpoints to specified endpoint' do
-      expect(chef_run.node['chef-server'][:configuration]).to include(endpoint)
+      expect(chef_run.node['chef-server']['configuration']).to include(endpoint)
     end
   end
 
@@ -133,7 +133,7 @@ describe 'chef-server-populator::solo' do
 
     context 'when the populator org is also the default org' do
       before do
-        chef_run.node.set[:chef_server_populator][:default_org] = test_org[:org_name]
+        chef_run.node.set['chef_server_populator']['default_org'] = test_org[:org_name]
         chef_run.converge(described_recipe)
       end
 
@@ -178,7 +178,7 @@ describe 'chef-server-populator::solo' do
   context 'for each client defined in attributes' do
 
     before do
-      chef_run.node.set[:chef_server_populator][:clients] = {
+      chef_run.node.set['chef_server_populator']['clients'] = {
         test_org_user[:name] => "-----BEGIN PUBLIC KEY-----\n-----END PUBLIC KEY-----\n"
       }
 
