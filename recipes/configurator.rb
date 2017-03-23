@@ -7,24 +7,24 @@ unless(node['chef_server_populator']['endpoint'])
 end
 
 if(node['chef_server_populator']['endpoint'])
-  node.set['chef-server']['api_fqdn'] =
-    node.set['chef_server_populator']['chef_server']['configuration']['nginx']['server_name'] =
-    node.set['chef_server_populator']['chef_server']['configuration']['bookshelf']['vip'] =
-    node.set['chef_server_populator']['chef_server']['configuration']['lb']['api_fqdn'] =
-    node.set['chef_server_populator']['chef_server']['configuration']['lb']['web_ui_fqdn'] = node['chef_server_populator']['endpoint']
-  node.set['chef_server_populator']['chef_server']['configuration']['nginx']['url'] =
-    node.set['chef_server_populator']['chef_server']['configuration']['bookshelf']['url'] = "https://#{node['chef_server_populator']['endpoint']}"
+  node.default['chef-server']['api_fqdn'] =
+    node.default['chef_server_populator']['chef_server']['configuration']['nginx']['server_name'] =
+    node.default['chef_server_populator']['chef_server']['configuration']['bookshelf']['vip'] =
+    node.default['chef_server_populator']['chef_server']['configuration']['lb']['api_fqdn'] =
+    node.default['chef_server_populator']['chef_server']['configuration']['lb']['web_ui_fqdn'] = node['chef_server_populator']['endpoint']
+  node.default['chef_server_populator']['chef_server']['configuration']['nginx']['url'] =
+    node.default['chef_server_populator']['chef_server']['configuration']['bookshelf']['url'] = "https://#{node['chef_server_populator']['endpoint']}"
 else
-  node.set['chef-server']['api_fqdn'] =
-    node.set['chef_server_populator']['chef_server']['configuration']['nginx']['server_name'] =
-    node.set['chef_server_populator']['chef_server']['configuration']['bookshelf']['vip'] =
-    node.set['chef_server_populator']['chef_server']['configuration']['lb']['api_fqdn'] =
-    node.set['chef_server_populator']['chef_server']['configuration']['lb']['web_ui_fqdn'] = node['fqdn']
-  node.set['chef_server_populator']['chef_server']['configuration']['nginx']['url'] =
-    node.set['chef_server_populator']['chef_server']['configuration']['bookshelf']['url'] = "https://#{node['fqdn']}"
+  node.default['chef-server']['api_fqdn'] =
+    node.default['chef_server_populator']['chef_server']['configuration']['nginx']['server_name'] =
+    node.default['chef_server_populator']['chef_server']['configuration']['bookshelf']['vip'] =
+    node.default['chef_server_populator']['chef_server']['configuration']['lb']['api_fqdn'] =
+    node.default['chef_server_populator']['chef_server']['configuration']['lb']['web_ui_fqdn'] = node['fqdn']
+  node.default['chef_server_populator']['chef_server']['configuration']['nginx']['url'] =
+    node.default['chef_server_populator']['chef_server']['configuration']['bookshelf']['url'] = "https://#{node['fqdn']}"
 end
 
-node.set['chef_server_populator']['chef_server']['configuration']['postgresql']['shared_buffers'] = "#{(node['memory']['total'].to_i / 1024) / 4}MB"
+node.default['chef_server_populator']['chef_server']['configuration']['postgresql']['shared_buffers'] = "#{(node['memory']['total'].to_i / 1024) / 4}MB"
 
 mash_maker = lambda do |x|
   if(x.is_a?(Hash))
@@ -58,7 +58,7 @@ end
 
 current_server_config.delete(:configuration)
 
-node.set['chef-server'] = Chef::Mixin::DeepMerge.deep_merge(
+node.default['chef-server'] = Chef::Mixin::DeepMerge.deep_merge(
   current_server_config,
   populator_server_config
 )

@@ -6,13 +6,13 @@ describe 'chef-server-populator::restore' do
   let(:db_restore_user) { 'opscode-pgsql' }
   let(:chef_run) do
     ChefSpec::SoloRunner.new do |node|
-      node.set['chef_server_populator']['restore']['local_path'] = restore_path
+      node.override['chef_server_populator']['restore']['local_path'] = restore_path
     end.converge(described_recipe)
   end
 
   context 'when provided a URL for the database dump' do
     it 'downloads the remote file' do
-      chef_run.node.set['chef_server_populator']['restore']['file'] = 'https://www.example.com/restore.dump'
+      chef_run.node.override['chef_server_populator']['restore']['file'] = 'https://www.example.com/restore.dump'
       chef_run.converge(described_recipe)
       expect(chef_run).to create_remote_file(File.join(restore_path, 'chef_database_restore.dump'))
     end
@@ -20,7 +20,7 @@ describe 'chef-server-populator::restore' do
 
   context 'when provided a URL for the tarball' do
     it 'downloads the remote file' do
-      chef_run.node.set['chef_server_populator']['restore']['data'] = 'https://www.example.com/restore.tgz'
+      chef_run.node.override['chef_server_populator']['restore']['data'] = 'https://www.example.com/restore.tgz'
       chef_run.converge(described_recipe)
       expect(chef_run).to create_remote_file(File.join(restore_path, 'chef_data_restore.tar.gz'))
     end

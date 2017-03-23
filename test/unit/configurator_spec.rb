@@ -8,8 +8,8 @@ describe 'chef-server-populator::configurator' do
   let(:chef_run) {
     ChefSpec::SoloRunner.new do |node|
       node.automatic['fqdn'] = fqdn
-      node.set['chef_server_populator']['chef_server']['version'] = '12.0.5'
-      node.set['chef_server_populator']['chef_server']['foo'] = 'bar'
+      node.override['chef_server_populator']['chef_server']['version'] = '12.0.5'
+      node.override['chef_server_populator']['chef_server']['foo'] = 'bar'
     end.converge(described_recipe)
   }
 
@@ -19,7 +19,7 @@ describe 'chef-server-populator::configurator' do
 
   context 'with a specified endpoint' do
     before do
-      chef_run.node.set['chef_server_populator']['endpoint'] = endpoint
+      chef_run.node.override['chef_server_populator']['endpoint'] = endpoint
       chef_run.converge(described_recipe)
     end
 
