@@ -29,7 +29,10 @@ suites:
       chef_server_populator:
         endpoint: localhost
         solo_org:
-          validator_pub_key: validator_pub.pem
+          inception_llc:
+            org_name: inception_llc
+            full_name: Inception
+            validator_pub_key: validator_pub.pem
         org_users:
           pub_key: user_pub.pem
         clients:
@@ -44,7 +47,10 @@ suites:
       chef_server_populator:
         endpoint: localhost
         solo_org:
-          validator_pub_key: validator_pub.pem
+          inception_llc:
+            org_name: inception_llc
+            full_name: Inception
+            validator_pub_key: validator_pub.pem
         org_users:
           pub_key: user_pub.pem
         clients:
@@ -59,7 +65,10 @@ suites:
       chef_server_populator:
         endpoint: localhost
         solo_org:
-          validator_pub_key: validator_pub.pem
+          inception_llc:
+            org_name: inception_llc
+            full_name: Inception
+            validator_pub_key: validator_pub.pem
         org_users:
           pub_key: user_pub.pem
         clients:
@@ -98,7 +107,10 @@ suites:
       chef_server_populator:
         endpoint: localhost
         solo_org:
-          validator_pub_key: validator_pub.pem
+          inception_llc:
+            org_name: inception_llc
+            full_name: Inception
+            validator_pub_key: validator_pub.pem
         org_users:
           pub_key: user_pub.pem
         clients:
