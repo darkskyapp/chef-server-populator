@@ -6,34 +6,34 @@ describe 'chef-server-populator::org' do
 
   let(:test_org) {
     Mash.new(
-      :org_name => 'endurance',
-      :full_name => 'Endurance Shuttle Mission',
-      :validator_pub_key => 'validation_pub.pem'
+      'org_name'          => 'endurance',
+      'full_name'         => 'Endurance Shuttle Mission',
+      'validator_pub_key' => 'validation_pub.pem'
     )
   }
 
   let(:test_org_user) {
     Mash.new(
-      :name => 'murph',
-      :first => 'Murphy',
-      :last => 'Cooper',
-      :email => 'murph@nasa.gov'
+      'name'  => 'murph',
+      'first' => 'Murphy',
+      'last'  => 'Cooper',
+      'email' => 'murph@nasa.gov'
     )
   }
 
   let(:list_user_keys_cmd) {
-    "chef-server-ctl list-user-keys #{test_org_user[:name]}"
+    "chef-server-ctl list-user-keys #{test_org_user['name']}"
   }
 
   let(:list_validator_keys_cmd) {
-    "chef-server-ctl list-client-keys #{test_org[:org_name]} #{test_org[:org_name]}-validator"
+    "chef-server-ctl list-client-keys #{test_org['org_name']} #{test_org['org_name']}-validator"
   }
 
   let(:chef_run) {
     ChefSpec::ServerRunner.new do |node, _server|
-      node.set[:chef_server_populator][:solo_org] = test_org
-      node.set[:chef_server_populator][:solo_org_user] = test_org_user
-      node.set[:chef_server_populator][:default_org] = default_org
+      node.set['chef_server_populator']['solo_org'] = test_org
+      node.set['chef_server_populator']['solo_org_user'] = test_org_user
+      node.set['chef_server_populator']['default_org'] = default_org
     end.converge(described_recipe)
   }
 
@@ -42,18 +42,18 @@ describe 'chef-server-populator::org' do
   }
 
   before do
-    stub_command("chef-server-ctl user-show #{test_org_user[:name]}").and_return(false)
+    stub_command("chef-server-ctl user-show #{test_org_user['name']}").and_return(false)
     stub_command("#{list_user_keys_cmd} | grep 'name: populator$'").and_return(false)
     stub_command("#{list_user_keys_cmd} | grep 'name: default$'").and_return(false)
-    stub_command("chef-server-ctl org-list | grep '^#{test_org[:org_name]}$'").and_return(false)
+    stub_command("chef-server-ctl org-list | grep '^#{test_org['org_name']}$'").and_return(false)
     stub_command("#{list_validator_keys_cmd} | grep 'name: populator$'").and_return(false)
     stub_command("#{list_validator_keys_cmd} | grep 'name: default$'").and_return(false)
-    stub_command("chef-server-ctl list-client-keys #{test_org[:org_name]} #{test_org[:org_name]}-validator | grep 'name: populator$'").and_return(false)
-        stub_command("chef-server-ctl list-client-keys #{test_org[:org_name]} #{test_org[:org_name]}-validator | grep 'name: default$'").and_return(true)
+    stub_command("chef-server-ctl list-client-keys #{test_org['org_name']} #{test_org['org_name']}-validator | grep 'name: populator$'").and_return(false)
+        stub_command("chef-server-ctl list-client-keys #{test_org['org_name']} #{test_org['org_name']}-validator | grep 'name: default$'").and_return(true)
   end
 
   it 'overrides the chef-server default_orgname' do
-    expect(chef_run.node['chef-server'][:configuration]).to include(default_org)
+    expect(chef_run.node['chef-server']['configuration']).to include(default_org)
   end
 
 
@@ -82,7 +82,7 @@ describe 'chef-server-populator::org' do
 
     context 'when the populator org is also the default org' do
       it 'notifies chef-server to reconfigure immediately' do
-        chef_run.node.set[:chef_server_populator][:default_org] = test_org[:org_name]
+        chef_run.node.set['chef_server_populator']['default_org'] = test_org['org_name']
         chef_run.converge(described_recipe)
         expect(execute_create_populator_org).to notify('execute[reconfigure for populator org create]').to(:run).immediately
       end

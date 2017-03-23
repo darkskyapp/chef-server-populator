@@ -17,8 +17,8 @@ support, please pin your environment to version 0.4.0.
 * Create json for organization, user, and (optionally) client(s)
 * Run chef-solo
 
-See the `default[:chef_server_populator][:solo_org]` and
-`default[:chef_server_populator][:solo_org_user]` attribute hashes in
+See the `default['chef_server_populator']['solo_org']` and
+`default['chef_server_populator']['solo_org_user']` attribute hashes in
 `attributes/default.rb` for the required attribute structure.
 
 **When converging with chef-client:**
@@ -29,7 +29,7 @@ See the `default[:chef_server_populator][:solo_org]` and
 
 Applicable attributes:
 
-* `node[:chef_server_populator][:databag]` - name of the data bag
+* `node['chef_server_populator']['databag']` - name of the data bag
 
 Structure of the data bag item:
 
@@ -97,15 +97,15 @@ the full name will be used, as the option is not parsed correctly
 
 **Restoring from a backup:**
 
-* Set path to restore file with node[:chef_server_populator][:restore][:file]
+* Set path to restore file with `node['chef_server_populator']['restore']['file']`
 * The restore recipe is run if a restore file is set
 * The restore file can be remote or local
 
 **When enabling backups:**
 
 * Include chef-server-populator::restore recipe
-* Set backup cron interval with node[:chef_server_populator][:schedule]
-* Optionally set a remote storage location with node[:chef_server_populator][:backup][:remote][:connection]
+* Set backup cron interval with `node['chef_server_populator']['schedule']`
+* Optionally set a remote storage location with `node['chef_server_populator']['backup']['remote']['connection']`
 * Backups include both a pg_dump of the entire chef database and a tarball of the Chef data directory
 
 ## Public Key Format
@@ -130,14 +130,14 @@ openssl rsa -in <path_to_keyfile>.pem -pubout
 
 ## Extras
 
-Need to use the IP address of the node for a bit, or another name  instead of
-having `node[:fqdn]`?
+Need to use the IP address of the node for a bit, or another name instead of
+having `node['fqdn']`?
 
-* `node[:chef_server_populator][:servername_override]`
+* `node['chef_server_populator']['servername_override']`
 
 Keep chef server configured via chef client:
 
-* `node[:chef_server_populator][:chef_server]`
+* `node['chef_server_populator']['chef_server']`
 
 If the hash is non-empty, it will write the chef-server `dna.json` and trigger a
 `reconfigure` when ever the attributes are updated.

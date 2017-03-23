@@ -8,50 +8,50 @@ describe 'chef-server-populator::solo' do
 
   let(:test_org) do
     Mash.new(
-      :org_name => 'endurance',
-      :full_name => 'Endurance Shuttle Mission',
-      :validator_pub_key => 'validation_pub.pem'
+      'org_name'          => 'endurance',
+      'full_name'         => 'Endurance Shuttle Mission',
+      'validator_pub_key' => 'validation_pub.pem'
     )
   end
 
   let(:test_org_user) do
     Mash.new(
-      :name => 'murph',
-      :first => 'Murphy',
-      :last => 'Cooper',
-      :email => 'murph@nasa.gov'
+      'name'  => 'murph',
+      'first' => 'Murphy',
+      'last'  => 'Cooper',
+      'email' => 'murph@nasa.gov'
     )
   end
 
-  let(:list_user_keys_cmd) { "chef-server-ctl list-user-keys #{test_org_user[:name]}" }
+  let(:list_user_keys_cmd) { "chef-server-ctl list-user-keys #{test_org_user['name']}" }
 
-  let(:list_validator_keys_cmd) { "chef-server-ctl list-client-keys #{test_org[:org_name]} #{test_org[:org_name]}-validator" }
+  let(:list_validator_keys_cmd) { "chef-server-ctl list-client-keys #{test_org['org_name']} #{test_org['org_name']}-validator" }
 
-  let(:list_client_keys_cmd) { "chef-server-ctl list-client-keys #{server_org} #{test_org_user[:name]}" }
+  let(:list_client_keys_cmd) { "chef-server-ctl list-client-keys #{server_org} #{test_org_user['name']}" }
 
-  let(:list_validator_client_keys) { "chef-server-ctl list-client-keys #{test_org[:org_name]} #{test_org[:org_name]}-validator" }
+  let(:list_validator_client_keys) { "chef-server-ctl list-client-keys #{test_org['org_name']} #{test_org['org_name']}-validator" }
 
   let(:chef_run) do
     ChefSpec::SoloRunner.new do |node|
-      node.set[:chef_server_populator][:server_org] = server_org
-      node.set[:chef_server_populator][:default_org] = default_org
-      node.set[:chef_server_populator][:solo_org] = test_org
-      node.set[:chef_server_populator][:solo_org_user] = test_org_user
+      node.set['chef_server_populator']['server_org'] = server_org
+      node.set['chef_server_populator']['default_org'] = default_org
+      node.set['chef_server_populator']['solo_org'] = test_org
+      node.set['chef_server_populator']['solo_org_user'] = test_org_user
     end.converge(described_recipe)
   end
 
   let(:execute_create_populator_org) { chef_run.execute('create populator org') }
 
   before do
-    stub_command("chef-server-ctl user-show #{test_org_user[:name]}").and_return(false)
-    stub_command("#{list_user_keys_cmd} | grep 'name: #{test_org_user[:name]}$'").and_return(false)
+    stub_command("chef-server-ctl user-show #{test_org_user['name']}").and_return(false)
+    stub_command("#{list_user_keys_cmd} | grep 'name: #{test_org_user['name']}$'").and_return(false)
     stub_command("#{list_user_keys_cmd} | grep 'name: default$'").and_return(false)
     stub_command("#{list_user_keys_cmd} | grep 'name: populator$'").and_return(false)
-    stub_command("chef-server-ctl org-list | grep '^#{test_org[:org_name]}$'").and_return(false)
+    stub_command("chef-server-ctl org-list | grep '^#{test_org['org_name']}$'").and_return(false)
     stub_command("#{list_validator_client_keys} | grep 'name: populator$'").and_return(false)
     stub_command("#{list_validator_client_keys} | grep 'name: default$'").and_return(true)
     stub_command("#{list_client_keys_cmd} | grep 'name: default$'").and_return(false)
-    stub_command("/usr/bin/knife client list -s https://127.0.0.1/organizations/#{server_org} -c /etc/opscode/pivotal.rb| tr -d ' ' | grep '^#{test_org_user[:name]}$'").and_return(false)
+    stub_command("/usr/bin/knife client list -s https://127.0.0.1/organizations/#{server_org} -c /etc/opscode/pivotal.rb| tr -d ' ' | grep '^#{test_org_user['name']}$'").and_return(false)
     stub_command("#{list_client_keys_cmd} | grep 'name: populator$'").and_return(false)
   end
 
@@ -62,12 +62,12 @@ describe 'chef-server-populator::solo' do
   context 'without a default_org specified' do
 
     before do
-      chef_run.node.set[:chef_server_populator][:default_org] = nil
+      chef_run.node.set['chef_server_populator']['default_org'] = nil
       chef_run.converge(described_recipe)
     end
 
     it 'assigns the server_org as the default org' do
-      expect(chef_run.node[:chef_server_populator][:default_org]).to eq(server_org)
+      expect(chef_run.node['chef_server_populator']['default_org']).to eq(server_org)
     end
 
   end
@@ -88,7 +88,7 @@ describe 'chef-server-populator::solo' do
   #
 
   it 'overrides the chef-server default_orgname' do
-    expect(chef_run.node['chef-server'][:configuration]).to include(default_org)
+    expect(chef_run.node['chef-server']['configuration']).to include(default_org)
   end
 
   it 'creates the populator user' do
@@ -97,12 +97,12 @@ describe 'chef-server-populator::solo' do
 
   context 'with a specified endpoint' do
     before do
-      chef_run.node.set[:chef_server_populator][:endpoint] = endpoint
+      chef_run.node.set['chef_server_populator']['endpoint'] = endpoint
       chef_run.converge(described_recipe)
     end
 
     it 'overrides the chef server endpoints to specified endpoint' do
-      expect(chef_run.node['chef-server'][:configuration]).to include(endpoint)
+      expect(chef_run.node['chef-server']['configuration']).to include(endpoint)
     end
   end
 
@@ -133,7 +133,7 @@ describe 'chef-server-populator::solo' do
 
     context 'when the populator org is also the default org' do
       before do
-        chef_run.node.set[:chef_server_populator][:default_org] = test_org[:org_name]
+        chef_run.node.set['chef_server_populator']['default_org'] = test_org['org_name']
         chef_run.converge(described_recipe)
       end
 
@@ -178,8 +178,8 @@ describe 'chef-server-populator::solo' do
   context 'for each client defined in attributes' do
 
     before do
-      chef_run.node.set[:chef_server_populator][:clients] = {
-        test_org_user[:name] => "-----BEGIN PUBLIC KEY-----\n-----END PUBLIC KEY-----\n"
+      chef_run.node.set['chef_server_populator']['clients'] = {
+        test_org_user['name'] => "-----BEGIN PUBLIC KEY-----\n-----END PUBLIC KEY-----\n"
       }
 
       stub_command("#{list_client_keys_cmd} | grep 'name: default$'").and_return(false)
@@ -187,7 +187,7 @@ describe 'chef-server-populator::solo' do
     end
 
     it 'creates a client for each client defined in attributes' do
-      expect(chef_run).to run_execute("create client: #{test_org_user[:name]}")
+      expect(chef_run).to run_execute("create client: #{test_org_user['name']}")
     end
 
     context 'when the client has a default key on the server' do
@@ -198,13 +198,13 @@ describe 'chef-server-populator::solo' do
       end
 
       it 'removes the client\'s default public key' do
-        expect(chef_run).to run_execute("remove default public key for #{test_org_user[:name]}")
+        expect(chef_run).to run_execute("remove default public key for #{test_org_user['name']}")
       end
 
     end
 
     it 'sets the client\'s public key' do
-      expect(chef_run).to run_execute("set public key for: #{test_org_user[:name]}")
+      expect(chef_run).to run_execute("set public key for: #{test_org_user['name']}")
     end
   end
 
