@@ -35,7 +35,7 @@ describe 'chef-server-populator::solo' do
     ChefSpec::SoloRunner.new do |node|
       node.override['chef_server_populator']['server_org'] = server_org
       node.override['chef_server_populator']['default_org'] = default_org
-      node.override['chef_server_populator']['solo_org'] = test_org
+      node.override['chef_server_populator']['solo_org']['endurance'] = test_org
       node.override['chef_server_populator']['solo_org_user'] = test_org_user
     end.converge(described_recipe)
   end
