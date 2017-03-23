@@ -25,11 +25,9 @@ describe 'chef-server-populator::solo' do
 
   let(:list_user_keys_cmd) { "chef-server-ctl list-user-keys #{test_org_user[:name]}" }
 
-  let(:list_validator_keys_cmd) { "chef-server-ctl list-client-keys #{test_org[:org_name]} #{test_org[:org_name]}-validator" }
+  let(:list_validator_client_keys_cmd) { "chef-server-ctl list-client-keys #{test_org[:org_name]} #{test_org[:org_name]}-validator" }
 
   let(:list_client_keys_cmd) { "chef-server-ctl list-client-keys #{server_org} #{test_org_user[:name]}" }
-
-  let(:list_validator_client_keys) { "chef-server-ctl list-client-keys #{test_org[:org_name]} #{test_org[:org_name]}-validator" }
 
   let(:chef_run) do
     ChefSpec::SoloRunner.new do |node|
@@ -49,8 +47,8 @@ describe 'chef-server-populator::solo' do
     stub_command("#{list_user_keys_cmd} | grep 'name: default$'").and_return(false)
     stub_command("#{list_user_keys_cmd} | grep 'name: populator$'").and_return(false)
     stub_command("chef-server-ctl org-list | grep '^#{test_org[:org_name]}$'").and_return(false)
-    stub_command("#{list_validator_client_keys} | grep 'name: populator$'").and_return(false)
-    stub_command("#{list_validator_client_keys} | grep 'name: default$'").and_return(true)
+    stub_command("#{list_validator_client_keys_cmd} | grep 'name: populator$'").and_return(false)
+    stub_command("#{list_validator_client_keys_cmd} | grep 'name: default$'").and_return(true)
     stub_command("#{list_client_keys_cmd} | grep 'name: default$'").and_return(false)
     stub_command("/usr/bin/knife client list -s https://127.0.0.1/organizations/#{server_org} -c /etc/opscode/pivotal.rb| tr -d ' ' | grep '^#{test_org_user[:name]}$'").and_return(false)
     stub_command("#{list_client_keys_cmd} | grep 'name: populator$'").and_return(false)
@@ -146,7 +144,7 @@ describe 'chef-server-populator::solo' do
 
   context 'when the populator org does not have a "populator" validator key' do
     before do
-      stub_command("#{list_validator_keys_cmd} | grep 'name: populator$'").and_return(false)
+      stub_command("#{list_validator_client_keys_cmd} | grep 'name: populator$'").and_return(false)
     end
 
     it 'adds a validator key for the populator org' do
@@ -156,7 +154,7 @@ describe 'chef-server-populator::solo' do
 
   context 'when the populator org has a "populator" validator key' do
     before do
-      stub_command("#{list_validator_keys_cmd} | grep 'name: populator$'").and_return(true)
+      stub_command("#{list_validator_client_keys_cmd} | grep 'name: populator$'").and_return(true)
     end
 
     it 'does not add a validator key for the populator org' do
@@ -166,7 +164,7 @@ describe 'chef-server-populator::solo' do
 
   context 'when the populator org has a default validator key' do
     before do
-      stub_command("#{list_validator_keys_cmd} | grep 'name: default$'").and_return(true)
+      stub_command("#{list_validator_client_keys_cmd} | grep 'name: default$'").and_return(true)
     end
 
     it 'removes the populator default validator key' do
