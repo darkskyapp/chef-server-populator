@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 gem "chef"
 gem "chefspec", "~> 4.2.0"
-gem "librarian-chef"
+gem "berkshelf"
 gem "rake"
 
 group :integration do

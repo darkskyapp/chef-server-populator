@@ -1,2 +1,2 @@
 require 'chefspec'
-require 'chefspec/librarian'
+require 'chefspec/berkshelf'
