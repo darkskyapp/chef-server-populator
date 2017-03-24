@@ -27,7 +27,9 @@ describe 'chef-server-populator::solo' do
 
   let(:list_validator_client_keys_cmd) { "chef-server-ctl list-client-keys #{test_org[:org_name]} #{test_org[:org_name]}-validator" }
 
-  let(:list_client_keys_cmd) { "chef-server-ctl list-client-keys #{server_org} #{test_org_user[:name]}" }
+  let(:list_server_org_client_keys_cmd) { "chef-server-ctl list-client-keys #{server_org} #{test_org_user[:name]}" }
+
+  let(:list_test_org_client_keys_cmd) { "chef-server-ctl list-client-keys #{test_org[:org_name]} #{test_org_user[:name]}" }
 
   let(:chef_run) do
     ChefSpec::SoloRunner.new do |node|
@@ -49,9 +51,12 @@ describe 'chef-server-populator::solo' do
     stub_command("chef-server-ctl org-list | grep '^#{test_org[:org_name]}$'").and_return(false)
     stub_command("#{list_validator_client_keys_cmd} | grep 'name: populator$'").and_return(false)
     stub_command("#{list_validator_client_keys_cmd} | grep 'name: default$'").and_return(true)
-    stub_command("#{list_client_keys_cmd} | grep 'name: default$'").and_return(false)
+    stub_command("#{list_server_org_client_keys_cmd} | grep 'name: default$'").and_return(false)
+    stub_command("#{list_server_org_client_keys_cmd} | grep 'name: populator$'").and_return(false)
+    stub_command("#{list_test_org_client_keys_cmd} | grep 'name: default$'").and_return(false)
+    stub_command("#{list_test_org_client_keys_cmd} | grep 'name: populator$'").and_return(false)
     stub_command("/usr/bin/knife client list -s https://127.0.0.1/organizations/#{server_org} -c /etc/opscode/pivotal.rb| tr -d ' ' | grep '^#{test_org_user[:name]}$'").and_return(false)
-    stub_command("#{list_client_keys_cmd} | grep 'name: populator$'").and_return(false)
+    stub_command("/usr/bin/knife client list -s https://127.0.0.1/organizations/#{test_org[:org_name]} -c /etc/opscode/pivotal.rb| tr -d ' ' | grep '^#{test_org_user[:name]}$'").and_return(false)
   end
 
   it 'includes the configurator recipe' do
@@ -181,7 +186,7 @@ describe 'chef-server-populator::solo' do
         test_org_user[:name] => "-----BEGIN PUBLIC KEY-----\n-----END PUBLIC KEY-----\n"
       }
 
-      stub_command("#{list_client_keys_cmd} | grep 'name: default$'").and_return(false)
+      stub_command("#{list_server_org_client_keys_cmd} | grep 'name: default$'").and_return(false)
       chef_run.converge(described_recipe)
     end
 
@@ -192,7 +197,7 @@ describe 'chef-server-populator::solo' do
     context 'when the client has a default key on the server' do
 
       before do
-        stub_command("#{list_client_keys_cmd} | grep 'name: default$'").and_return(true)
+        stub_command("#{list_server_org_client_keys_cmd} | grep 'name: default$'").and_return(true)
         chef_run.converge(described_recipe)
       end
 
