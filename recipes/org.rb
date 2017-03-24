@@ -45,7 +45,7 @@ orgs.each do |k,org|
       command "chef-server-ctl add-client-key #{org['org_name']} #{org['org_name']}-validator --public-key-path #{conf_dir}/#{org['validator_pub_key']} --key-name populator"
     else
       command "chef-server-ctl add-client-key #{org['org_name']} #{org['org_name']}-validator #{conf_dir}/#{org['validator_pub_key']} --key-name populator"
-        end
+    end
     not_if "chef-server-ctl list-client-keys #{org['org_name']} #{org['org_name']}-validator | grep 'name: populator$'"
   end
 
