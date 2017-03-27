@@ -1,4 +1,4 @@
-require_relative 'spec_helper'
+require 'spec_helper'
 
 describe 'chef-server-populator::restore' do
   let(:restore_path) { '/tmp/chef_restore' }

@@ -1,4 +1,4 @@
-require_relative 'spec_helper'
+require 'spec_helper'
 
 describe 'chef-server-populator::default' do
   let(:chef_solo_run) { ChefSpec::SoloRunner.new.converge(described_recipe) }

@@ -1,4 +1,4 @@
-require_relative 'spec_helper'
+require 'spec_helper'
 
 describe 'chef-server-populator::solo' do
   let(:server_org) { 'nasa' }
