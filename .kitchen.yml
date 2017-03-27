@@ -33,7 +33,7 @@ suites:
       - recipe[chef-server-populator]
     attributes:
       chef-server:
-        version: 12.5.0
+        version: 12.12.0
       chef_server_populator:
         endpoint: localhost
         solo_org:
@@ -51,7 +51,7 @@ suites:
       - recipe[chef-server-populator]
     attributes:
       chef-server:
-        version: 12.0.7
+        version: 12.11.0
       chef_server_populator:
         endpoint: localhost
         solo_org:
@@ -81,7 +81,7 @@ suites:
       - recipe[chef-server-populator]
     attributes:
       chef-server:
-        version: 12.0.7
+        version: 12.11.0
       chef_server_populator:
         endpoint: localhost
         databag: chef
