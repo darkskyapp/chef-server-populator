@@ -10,11 +10,11 @@ directory node['chef_server_populator']['backup']['dir'] do
   mode  '0755'
 end
 
-#Upload to Remote Storage
+# Upload to Remote Storage
 # Include fog
 case node['platform_family']
 when 'debian'
-  packages =  %w(gcc libxml2 libxml2-dev libxslt-dev)
+  packages = %w(gcc libxml2 libxml2-dev libxslt-dev)
 when 'rhel'
   packages = %w(gcc libxml2 libxml2-devel libxslt libxslt-devel patch)
 end
@@ -24,9 +24,7 @@ end
 
 node['chef_server_populator']['backup_gems'].each_pair do |gem_name, gem_version|
   gem_package gem_name do
-    if !gem_version.nil?
-      version gem_version
-    end
+    version gem_version unless gem_version.nil?
     retries 2
   end
 end
@@ -40,7 +38,7 @@ end
 file File.join(node['chef_server_populator']['configuration_directory'], 'backup.json') do
   content Chef::JSONCompat.to_json_pretty(
     node['chef_server_populator']['backup'].merge(
-      :cookbook_version => node.run_context.cookbook_collection['chef-server-populator'].version
+      cookbook_version: node.run_context.cookbook_collection['chef-server-populator'].version
     )
   )
   owner 'root'
@@ -57,8 +55,8 @@ cron 'Chef Server Backups' do
   command <<-EOF
   BUNDLE_GEMFILE=/etc/opscode/Gemfile bundle install --path /etc/opscode/.vendor && BUNDLE_GEMFILE=/etc/opscode/Gemfile bundle exec /usr/local/bin/chef-server-backup
   EOF
-  node['chef_server_populator']['backup']['schedule'].each do |k,v|
-    send(k,v)
+  node['chef_server_populator']['backup']['schedule'].each do |k, v|
+    send(k, v)
   end
-  path "/opt/chef/embedded/bin/:/usr/bin:/usr/local/bin:/bin"
+  path '/opt/chef/embedded/bin/:/usr/bin:/usr/local/bin:/bin'
 end

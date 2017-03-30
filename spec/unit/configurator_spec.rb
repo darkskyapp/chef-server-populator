@@ -1,18 +1,17 @@
 require 'spec_helper'
 
 describe 'chef-server-populator::configurator' do
-
   let(:fqdn) { 'amazing-chef-server.example.com' }
   let(:endpoint) { 'amazing-chef-816064413.us-west-1.elb.amazonaws.com' }
 
-  let(:chef_run) {
+  let(:chef_run) do
     ChefSpec::SoloRunner.new do |node|
       node.automatic['fqdn'] = fqdn
       node.automatic['memory']['total'] = '2048000kB'
       node.override['chef_server_populator']['chef_server']['version'] = '12.0.5'
       node.override['chef_server_populator']['chef_server']['foo'] = 'bar'
     end.converge(described_recipe)
-  }
+  end
 
   it 'overrides chef-server attributes with those from the chef_server_populator.chef_server hash' do
     expect(chef_run.node['chef-server']['foo']).to eq('bar')

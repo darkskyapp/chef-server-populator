@@ -40,50 +40,50 @@ describe 'chef-server-populator::restore' do
 
   it 'stops all chef server services before restoring' do
     expect(chef_run).to run_execute('backup chef server stop').with(
-      :creates => restore_lock
+      creates: restore_lock
     )
   end
 
   it 'starts postgres before restoring' do
     expect(chef_run).to run_execute('restore chef server start postgres').with(
-      :creates => restore_lock
+      creates: restore_lock
     )
   end
 
   it 'restores database dump to postgres' do
     expect(chef_run).to run_execute('restoring chef data').with(
-      :user => db_restore_user,
-      :creates => restore_lock
+      user: db_restore_user,
+      creates: restore_lock
     )
   end
 
   it 'removes existing data' do
     expect(chef_run).to run_execute('remove existing data').with(
-      :creates => restore_lock
+      creates: restore_lock
     )
   end
 
   it 'restores data from tarball' do
     expect(chef_run).to run_execute('restore tarball data').with(
-      :creates => restore_lock
+      creates: restore_lock
     )
   end
 
   it 'restarts all chef server services' do
     expect(chef_run).to run_execute('restore chef server restart').with(
-      :creates => restore_lock
+      creates: restore_lock
     )
   end
 
   it 'pauses to give opscode-erchef time to start' do
     expect(chef_run).to run_execute('restore chef server wait for opscode-erchef').with(
-      :creates => restore_lock
+      creates: restore_lock
     )
   end
 
   it 'reindexes all orgs on the server' do
     expect(chef_run).to run_execute('restore chef server reindex').with(
-      :creates => restore_lock
+      creates: restore_lock
     )
   end
 

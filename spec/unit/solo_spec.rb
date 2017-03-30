@@ -8,18 +8,18 @@ describe 'chef-server-populator::solo' do
 
   let(:test_org) do
     Mash.new(
-      :org_name => 'endurance',
-      :full_name => 'Endurance Shuttle Mission',
-      :validator_pub_key => 'validation_pub.pem'
+      org_name: 'endurance',
+      full_name: 'Endurance Shuttle Mission',
+      validator_pub_key: 'validation_pub.pem'
     )
   end
 
   let(:test_org_user) do
     Mash.new(
-      :name => 'murph',
-      :first => 'Murphy',
-      :last => 'Cooper',
-      :email => 'murph@nasa.gov'
+      name: 'murph',
+      first: 'Murphy',
+      last: 'Cooper',
+      email: 'murph@nasa.gov'
     )
   end
 
@@ -64,7 +64,6 @@ describe 'chef-server-populator::solo' do
   end
 
   context 'without a default_org specified' do
-
     before do
       chef_run.node.override['chef_server_populator']['default_org'] = nil
       chef_run.converge(described_recipe)
@@ -73,7 +72,6 @@ describe 'chef-server-populator::solo' do
     it 'assigns the server_org as the default org' do
       expect(chef_run.node['chef_server_populator']['default_org']).to eq(server_org)
     end
-
   end
 
   it 'includes the org recipe' do
@@ -180,10 +178,9 @@ describe 'chef-server-populator::solo' do
   # End tests covering 'org' recipe
 
   context 'for each client defined in attributes' do
-
     before do
       chef_run.node.override['chef_server_populator']['clients'] = {
-        test_org_user[:name] => "-----BEGIN PUBLIC KEY-----\n-----END PUBLIC KEY-----\n"
+        test_org_user[:name] => "-----BEGIN PUBLIC KEY-----\n-----END PUBLIC KEY-----\n",
       }
 
       stub_command("#{list_server_org_client_keys_cmd} | grep 'name: default$'").and_return(false)
@@ -195,7 +192,6 @@ describe 'chef-server-populator::solo' do
     end
 
     context 'when the client has a default key on the server' do
-
       before do
         stub_command("#{list_server_org_client_keys_cmd} | grep 'name: default$'").and_return(true)
         chef_run.converge(described_recipe)
@@ -204,7 +200,6 @@ describe 'chef-server-populator::solo' do
       it 'removes the client\'s default public key' do
         expect(chef_run).to run_execute("remove default public key for #{test_org_user[:name]}")
       end
-
     end
 
     it 'sets the client\'s public key' do
@@ -214,8 +209,7 @@ describe 'chef-server-populator::solo' do
 
   it 'uploads the chef-server-populator cookbook to the new Chef server' do
     expect(chef_run).to run_execute('install chef-server-populator cookbook').with(
-      :retries => 5
+      retries: 5
     )
   end
-
 end

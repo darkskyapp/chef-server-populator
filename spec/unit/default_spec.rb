@@ -32,5 +32,4 @@ describe 'chef-server-populator::default' do
       chef_solo_run.converge(described_recipe)
     end
   end
-
 end
