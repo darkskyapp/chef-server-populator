@@ -53,10 +53,11 @@ end
 
 cron 'Chef Server Backups' do
   command <<-EOF
-  BUNDLE_GEMFILE=/etc/opscode/Gemfile bundle install --path /etc/opscode/.vendor && BUNDLE_GEMFILE=/etc/opscode/Gemfile bundle exec /usr/local/bin/chef-server-backup
+  bundle install --path /etc/opscode/.vendor && bundle exec /usr/local/bin/chef-server-backup
   EOF
   node['chef_server_populator']['backup']['schedule'].each do |k, v|
     send(k, v)
   end
+  environment BUNDLE_GEMFILE: '/etc/opscode/Gemfile'
   path '/opt/chef/embedded/bin/:/usr/bin:/usr/local/bin:/bin'
 end
