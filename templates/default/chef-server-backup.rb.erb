@@ -6,9 +6,9 @@ require 'multi_json'
 require 'mixlib/shellout'
 require 'socket'
 
-DEFAULT_CONFIGURATION_PATH = '<%= node['chef_server_populator']['configuration_directory'] %>/backup.json'
+DEFAULT_CONFIGURATION_PATH = '<%= node['chef_server_populator']['configuration_directory'] %>/backup.json'.freeze
 
-if(ARGV.size > 1 || (ARGV.first && !File.exists?(ARGV.first.to_s)))
+if ARGV.size > 1 || (ARGV.first && !File.exist?(ARGV.first.to_s))
   puts 'Usage: chef-server-backup CONFIG_FILE_PATH'
   exit
 else
@@ -16,23 +16,23 @@ else
     File.read(
       ARGV.first || DEFAULT_CONFIGURATION_PATH
     ),
-    :symbolize_keys => true
+    symbolize_keys: true
   )
 end
 
 s3 = Fog::Storage.new(provider: 'AWS',
-       region: config[:remote][:connection][:credentials][:region],
-       use_iam_profile: true)
+                      region: config[:remote][:connection][:credentials][:region],
+                      use_iam_profile: true)
 
 server_manifest = MultiJson.load(
   File.read('/opt/opscode/version-manifest.json'),
-  :symbolize_keys => true
+  symbolize_keys: true
 )
 
 prefix = [
   Time.now.to_i,
   "ver_#{server_manifest[:build_version]}",
-  config[:filename]
+  config[:filename],
 ].join('-')
 
 db_file = File.join(
@@ -54,20 +54,20 @@ end
 
 begin
   backup = Mixlib::ShellOut.new(
-      "/opt/opscode/embedded/bin/pg_dumpall -c -f #{db_file}",
-      :user => 'opscode-pgsql',
-      :cwd => config[:dir]
+    "/opt/opscode/embedded/bin/pg_dumpall -c -f #{db_file}",
+      user: 'opscode-pgsql',
+      cwd: config[:dir]
   )
   backup.run_command
   backup.error!
 
-  stop_pgsql = Mixlib::ShellOut.new("chef-server-ctl stop postgresql")
+  stop_pgsql = Mixlib::ShellOut.new('chef-server-ctl stop postgresql')
   stop_pgsql.run_command
   stop_pgsql.error!
 
   backup_data = Mixlib::ShellOut.new(
     "tar -czf #{data_file} --exclude=/etc/opscode/restore.json --exclude=/var/opt/opscode/rabbitmq/log /var/opt/opscode /etc/opscode",
-    :cwd => config[:dir]
+    cwd: config[:dir]
   )
   backup_data.run_command
   backup_data.error!
@@ -89,17 +89,18 @@ remote_prefix = [:remote, :file_prefix].inject(config) do |memo, key|
   memo[key] || break
 end
 
-if(remote_creds)
-  if(remote_directory)
+if remote_creds
+  if remote_directory
     directory = s3.directories.get(remote_directory)
     [db_file, data_file].each do |file|
-      [ :date_stamped, :latest ].each do |type|
+      %i(date_stamped latest).each do |type|
         remote_file_name = File.join(*[
-            type == :date_stamped ? File.basename(file) : "latest#{File.extname(file)}"
-          ].flatten.compact
-        )
+          type == :date_stamped ? File.basename(file) : "latest#{File.extname(file)}",
+        ].flatten.compact
+                                    )
         directory.files.create(key: "#{remote_prefix}/#{remote_file_name}", body: File.open(file))
       end
+
       File.delete(file)
     end
   else
@@ -110,10 +111,10 @@ else
   puts 'WARN: No remote credentials found. Backup is local only!'
 end
 
-dead_drop_hash = {name: "backup_chef_server",
-                  ttl: 86400,
-                  output: "backed up chef server successfully",
-                  status: 0}
+dead_drop_hash = { name: 'backup_chef_server',
+                   ttl: 86400,
+                   output: 'backed up chef server successfully',
+                   status: 0 }
 
 s = TCPSocket.new 'localhost', 3030
 s.puts dead_drop_hash.to_json
