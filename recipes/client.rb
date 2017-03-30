@@ -3,11 +3,6 @@ include_recipe 'chef-server-populator::configurator'
 knife_cmd = node['chef_server_populator']['knife_exec']
 knife_opts = '-c /etc/opscode/pivotal.rb'
 
-ssl_port = %w(chef-server configuration nginx ssl_port).inject(node) do |memo, key|
-  memo[key] || break
-end
-ssl_port = ":#{ssl_port}" if ssl_port
-
 pg_cmd = "/opt/chef-server/embedded/bin/psql -d opscode_chef"
 
 if node['chef_server_populator']['databag']
