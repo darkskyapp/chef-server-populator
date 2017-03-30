@@ -21,7 +21,7 @@ else
 end
 
 s3 = Fog::Storage.new(provider: 'AWS',
-       region: config[:remote]['connection']['credentials']['region'],
+       region: config[:remote][:connection][:credentials][:region],
        use_iam_profile: true)
 
 server_manifest = MultiJson.load(
