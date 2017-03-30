@@ -3,8 +3,6 @@ include_recipe 'chef-server-populator::configurator'
 knife_cmd = node['chef_server_populator']['knife_exec']
 knife_opts = '-c /etc/opscode/pivotal.rb'
 
-pg_cmd = "/opt/chef-server/embedded/bin/psql -d opscode_chef"
-
 if node['chef_server_populator']['databag']
   begin
     items = data_bag(node['chef_server_populator']['databag']).map do |bag_item|
