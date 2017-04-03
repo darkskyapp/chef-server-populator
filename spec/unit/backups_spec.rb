@@ -49,7 +49,7 @@ describe 'chef-server-populator::backups' do
 
   it 'creates a crontab entry for the backup script' do
     expect(chef_run).to create_cron('Chef Server Backups').with(
-      command: backup_script,
+      command: 'bundle install --path /etc/opscode/.vendor && bundle exec /usr/local/bin/chef-server-backup',
       minute: backup_schedule[:minute],
       hour: backup_schedule[:hour],
       path: '/opt/chef/embedded/bin/:/usr/bin:/usr/local/bin:/bin'

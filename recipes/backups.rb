@@ -45,9 +45,8 @@ template '/usr/local/bin/chef-server-backup' do
 end
 
 cron 'Chef Server Backups' do
-  command <<-EOF
-  bundle install --path /etc/opscode/.vendor && bundle exec /usr/local/bin/chef-server-backup
-  EOF
+  command 'bundle install --path /etc/opscode/.vendor && '\
+          'bundle exec /usr/local/bin/chef-server-backup'
   node['chef_server_populator']['backup']['schedule'].each do |k, v|
     send(k, v)
   end
