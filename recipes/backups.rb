@@ -22,13 +22,6 @@ packages.each do |fog_dep|
   package fog_dep
 end
 
-node['chef_server_populator']['backup_gems'].each_pair do |gem_name, gem_version|
-  gem_package gem_name do
-    version gem_version unless gem_version.nil?
-    retries 2
-  end
-end
-
 directory node['chef_server_populator']['configuration_directory'] do
   recursive true
   owner 'root'

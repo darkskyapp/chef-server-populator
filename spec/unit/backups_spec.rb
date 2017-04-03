@@ -5,7 +5,6 @@ describe 'chef-server-populator::backups' do
   let(:config_dir) { '/etc/populator/config' }
   let(:backup_script) { '/usr/local/bin/chef-server-backup' }
   let(:backup_schedule) { Mash.new(hour: '0', minute: '20') }
-  let(:gems) { Mash.new('hasversion' => '~> 0.1', 'hasnoversion' => nil) }
   let(:apt_packages) { %w(gcc libxml2 libxml2-dev libxslt-dev) }
   let(:yum_packages) { %w(gcc libxml2 libxml2-devel libxslt libxslt-devel patch) }
 
@@ -14,7 +13,6 @@ describe 'chef-server-populator::backups' do
       node.override['chef_server_populator']['backup']['dir'] = data_dir
       node.override['chef_server_populator']['configuration_directory'] = config_dir
       node.override['chef_server_populator']['backup_gems'] = gems
-      node.override['chef_server_populator']['backup']['schedule'] = backup_schedule
       node.override['chef_server_populator']['backup']['remote']['connection'] = {}
     end.converge(described_recipe)
   end
@@ -38,20 +36,6 @@ describe 'chef-server-populator::backups' do
 
     yum_packages.each do |pkg|
       expect(centos_chef_run).to install_package(pkg)
-    end
-  end
-
-  context 'when installing gems defined in `backup_gems` node attribute' do
-    context 'when the gem has a version defined' do
-      it 'installs the specified version of the gem' do
-        expect(chef_run).to install_gem_package('hasversion').with(version: '~> 0.1')
-      end
-    end
-
-    context 'when the gem has no specified version' do
-      it 'installs any version of the gem' do
-        expect(chef_run).to install_gem_package('hasnoversion')
-      end
     end
   end
 
