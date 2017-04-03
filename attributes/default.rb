@@ -26,8 +26,14 @@ default['chef_server_populator']['restore']['local_path'] = '/tmp/'
 default['chef_server_populator']['backup']['dir'] = '/tmp/chef-server/backup'
 default['chef_server_populator']['backup']['filename'] = 'chef-server-full'
 default['chef_server_populator']['backup']['remote']['connection'] = nil
-default['chef_server_populator']['backup']['remote']['directory'] = nil
+default['chef_server_populator']['backup']['remote']['bucket'] = nil
 default['chef_server_populator']['backup']['remote']['file_prefix'] = nil
+
+# Example remote backup:
+# default['chef_server_populator']['backup']['remote']['connection']['region'] = 'us-east-1'
+# default['chef_server_populator']['backup']['remote']['bucket'] = 'my-ops'
+# default['chef_server_populator']['backup']['remote']['file_prefix'] = 'chef/backups'
+
 default['chef_server_populator']['backup']['schedule'] = {
   minute: '33',
   hour: '3',

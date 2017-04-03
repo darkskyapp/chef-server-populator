@@ -6,48 +6,37 @@ include_recipe 'chef-server-populator::configurator'
 
 # if backup pull files include restore
 
-if node['chef_server_populator']['backup']['remote']['connection']
-  chef_gem 'http' do
+remote_conf = node['chef_server_populator']['backup']['remote']
+
+if remote_conf['connection']
+  chef_gem 'aws-sdk-s3' do
     compile_time true
-    version '0.9.8'
+    version      '1.0.0.rc3'
   end
 
-  chef_gem 'miasma-aws' do
-    compile_time true
-    version '0.1.26'
-  end
+  require 'aws-sdk-s3'
 
-  chef_gem 'miasma' do
-    compile_time true
-    version '0.2.30'
-  end
+  s3         = Aws::S3::Resource.new region: remote_conf['connection']['region']
+  bucket     = s3.bucket(remote_conf['bucket'])
+  gz_file    = bucket.object "#{remote_conf['file_prefix']}/latest.tgz"
+  dump_file  = bucket.object "#{remote_conf['file_prefix']}/latest.dump"
+  local_gz   = '/tmp/latest.tgz'
+  local_dump = '/tmp/latest.dump'
 
-  require 'miasma'
-
-  remote_creds = node['chef_server_populator']['backup']['remote']['connection']
-  remote_directory = node['chef_server_populator']['backup']['remote']['directory']
-  remote = Miasma.api(provider: remote_creds[:provider].to_s.downcase, type: 'storage', credentials: { aws_iam_instance_profile: true })
-  remote_bucket = remote.buckets.get(remote_directory)
-
-  if remote_bucket && gz_file = remote_bucket.files.get(File.join(node['chef_server_populator']['backup']['remote']['file_prefix'], 'latest.tgz'))
-    dump_file = remote_bucket.files.get(File.join(node['chef_server_populator']['backup']['remote']['file_prefix'], 'latest.dump'))
-    local_gz = '/tmp/latest.tgz'
-    local_dump = '/tmp/latest.dump'
-
-    File.open(local_gz, 'wb') do |file|
-      while (data = gz_file.body.readpartial(2048))
-        file.print data
-      end
-    end
-
-    File.open(local_dump, 'wb') do |file|
-      while (data = dump_file.body.readpartial(2048))
-        file.print data
-      end
-    end
+  begin
+    gz_file.get response_target: local_gz
+    dump_file.get response_target: local_dump
 
     node.default['chef_server_populator']['restore']['file'] = local_dump
     node.default['chef_server_populator']['restore']['data'] = local_gz
+  rescue Aws::S3::Errors::NoSuchBucket => e
+    Chef::Log.fatal e.message
+  rescue Aws::S3::Errors::NoSuchKey => e
+    Chef::Log.info "One of the backup files is missing from S3: " \
+                   "#{remote_conf['file_prefix']}/latest.tgz " \
+                   "or #{remote_conf['file_prefix']}/latest.dump"
+  rescue Aws::Errors::ServiceError => e
+    Chef::Log.error e.message
   end
 end
 
