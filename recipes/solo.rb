@@ -35,6 +35,9 @@ if remote_conf['connection']
     Chef::Log.info "One of the backup files is missing from S3: " \
                    "#{remote_conf['file_prefix']}/latest.tgz " \
                    "or #{remote_conf['file_prefix']}/latest.dump"
+
+    local_gz   = nil
+    local_dump = nil
   rescue Aws::Errors::ServiceError => e
     Chef::Log.error e.message
   end
