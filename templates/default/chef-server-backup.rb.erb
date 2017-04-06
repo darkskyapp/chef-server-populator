@@ -29,25 +29,17 @@ server_manifest = MultiJson.load(
   symbolize_keys: true
 )
 
-prefix = [
-  Time.now.to_i,
-  "ver_#{server_manifest[:build_version]}",
-  config[:filename],
-].join('-')
-
-db_file = File.join(
-  config[:dir],
-  "#{prefix}.dump"
-)
-
-data_file = File.join(
-  config[:dir],
-  "#{prefix}.tgz"
-)
+prefix    = "#{Time.now.to_i}-ver_#{server_manifest[:build_version]}-#{config[:filename]}"
+db_file   = File.join config[:dir], "#{prefix}.dump"
+data_file = File.join config[:dir], "#{prefix}.tgz"
 
 # stop services that write data we're backing up
-%w(bookshelf opscode-erchef opscode-solr4).each do |svc|
-  stop_service = Mixlib::ShellOut.new("chef-server-ctl stop #{svc}")
+%w(
+  bookshelf
+  opscode-erchef
+  opscode-solr4
+).each do |svc|
+  stop_service = Mixlib::ShellOut.new "chef-server-ctl stop #{svc}"
   stop_service.run_command
   stop_service.error!
 end
@@ -55,13 +47,13 @@ end
 begin
   backup = Mixlib::ShellOut.new(
     "/opt/opscode/embedded/bin/pg_dumpall -c -f #{db_file}",
-      user: 'opscode-pgsql',
-      cwd: config[:dir]
+    user: 'opscode-pgsql',
+    cwd: config[:dir]
   )
   backup.run_command
   backup.error!
 
-  stop_pgsql = Mixlib::ShellOut.new('chef-server-ctl stop postgresql')
+  stop_pgsql = Mixlib::ShellOut.new 'chef-server-ctl stop postgresql'
   stop_pgsql.run_command
   stop_pgsql.error!
 
@@ -72,7 +64,7 @@ begin
   backup_data.run_command
   backup_data.error!
 ensure
-  start_service = Mixlib::ShellOut.new('chef-server-ctl start')
+  start_service = Mixlib::ShellOut.new 'chef-server-ctl start'
   start_service.run_command
   start_service.error!
 end
@@ -92,20 +84,27 @@ end
 if remote_creds
   if remote_directory
     directory = s3.directories.get(remote_directory)
-    [db_file, data_file].each do |file|
-      %i(date_stamped latest).each do |type|
+
+    [
+      db_file,
+      data_file
+    ].each do |file|
+      %i(
+        date_stamped
+        latest
+      ).each do |type|
         remote_file_name = File.join(*[
-          type == :date_stamped ? File.basename(file) : "latest#{File.extname(file)}",
-        ].flatten.compact
-                                    )
+          type == :date_stamped ? File.basename(file) : "latest#{File.extname file}",
+        ].flatten.compact)
+
         directory.files.create(key: "#{remote_prefix}/#{remote_file_name}", body: File.open(file))
       end
 
-      File.delete(file)
+      File.delete file
     end
   else
     $stderr.puts 'ERROR: No remote directory defined for backup storage!'
-    exit -1
+    exit 1
   end
 else
   puts 'WARN: No remote credentials found. Backup is local only!'
