@@ -4,7 +4,6 @@ require 'json'
 require 'fog/aws'
 require 'multi_json'
 require 'mixlib/shellout'
-require 'socket'
 
 DEFAULT_CONFIGURATION_PATH = '<%= node['chef_server_populator']['configuration_directory'] %>/backup.json'.freeze
 
@@ -109,12 +108,3 @@ if remote_creds
 else
   puts 'WARN: No remote credentials found. Backup is local only!'
 end
-
-dead_drop_hash = { name: 'backup_chef_server',
-                   ttl: 86400,
-                   output: 'backed up chef server successfully',
-                   status: 0 }
-
-s = TCPSocket.new 'localhost', 3030
-s.puts dead_drop_hash.to_json
-s.close
