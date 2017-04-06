@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'json'
-require 'fog/aws'
+require 'aws-sdk-s3'
 require 'multi_json'
 require 'mixlib/shellout'
 
@@ -19,9 +18,7 @@ else
   )
 end
 
-s3 = Fog::Storage.new(provider: 'AWS',
-                      region: config[:remote][:connection][:region],
-                      use_iam_profile: true)
+s3 = Aws::S3::Resource.new region: config[:remote][:connection][:region]
 
 server_manifest = MultiJson.load(
   File.read('/opt/opscode/version-manifest.json'),
@@ -72,7 +69,7 @@ remote_creds = [:remote, :connection].inject(config) do |memo, key|
   memo[key] || break
 end
 
-remote_directory = [:remote, :directory].inject(config) do |memo, key|
+remote_directory = [:remote, :bucket].inject(config) do |memo, key|
   memo[key] || break
 end
 
@@ -82,7 +79,7 @@ end
 
 if remote_creds
   if remote_directory
-    directory = s3.directories.get(remote_directory)
+    bucket = s3.bucket remote_directory
 
     [
       db_file,
@@ -96,7 +93,7 @@ if remote_creds
           type == :date_stamped ? File.basename(file) : "latest#{File.extname file}",
         ].flatten.compact)
 
-        directory.files.create(key: "#{remote_prefix}/#{remote_file_name}", body: File.open(file))
+        bucket.object("#{remote_prefix}/#{remote_file_name}").upload_file file
       end
 
       File.delete file
