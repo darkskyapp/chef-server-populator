@@ -54,5 +54,5 @@ cron 'Chef Server Backups' do
     send(k, v)
   end
   environment BUNDLE_GEMFILE: '/etc/opscode/Gemfile'
-  path '/opt/chef/embedded/bin/:/usr/bin:/usr/local/bin:/bin'
+  path '/opt/chef/embedded/bin:/usr/bin:/usr/local/bin:/bin'
 end
