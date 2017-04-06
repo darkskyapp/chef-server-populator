@@ -1,4 +1,7 @@
-%w(Gemfile Gemfile.lock).each do |f|
+%w(
+  Gemfile
+  Gemfile.lock
+).each do |f|
   cookbook_file "/etc/opscode/#{f}" do
     action :create
   end
