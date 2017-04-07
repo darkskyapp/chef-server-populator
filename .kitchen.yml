@@ -14,7 +14,7 @@ suites:
   - name: default
     run_list:
       - recipe[test]
-      - recipe[chef-server-populator]
+      - recipe[ds_chef_server_populator]
     attributes:
       chef_server_populator:
         endpoint: localhost
@@ -30,7 +30,7 @@ suites:
   - name: default-specific-chef
     run_list:
       - recipe[test]
-      - recipe[chef-server-populator]
+      - recipe[ds_chef_server_populator]
     attributes:
       chef-server:
         version: 12.12.0
@@ -48,7 +48,7 @@ suites:
   - name: default-old-chef
     run_list:
       - recipe[test]
-      - recipe[chef-server-populator]
+      - recipe[ds_chef_server_populator]
     attributes:
       chef-server:
         version: 12.11.0
@@ -68,7 +68,7 @@ suites:
       name: chef_zero
     run_list:
       - recipe[test]
-      - recipe[chef-server-populator]
+      - recipe[ds_chef_server_populator]
     attributes:
       chef_server_populator:
         endpoint: localhost
@@ -78,7 +78,7 @@ suites:
       name: chef_zero
     run_list:
       - recipe[test]
-      - recipe[chef-server-populator]
+      - recipe[ds_chef_server_populator]
     attributes:
       chef-server:
         version: 12.11.0
@@ -89,8 +89,8 @@ suites:
     run_list:
       - recipe[test]
       - recipe[build-essential]
-      - recipe[chef-server-populator]
-      - recipe[chef-server-populator::backups]
+      - recipe[ds_chef_server_populator]
+      - recipe[ds_chef_server_populator::backups]
     attributes:
       chef_server_populator:
         endpoint: localhost

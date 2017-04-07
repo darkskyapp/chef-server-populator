@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'chef-server-populator::client' do
+describe 'ds_chef_server_populator::client' do
   let(:populator_data_bag) { 'populator' }
 
   let(:knife_cmd) { '/opt/chef/bin/knife' }

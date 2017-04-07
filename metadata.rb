@@ -1,10 +1,10 @@
-name 'chef-server-populator'
+name 'ds_chef_server_populator'
 description 'Populate chef server with stuff you want'
-maintainer 'Heavywater'
-maintainer_email 'support@hw-ops.com'
-version '2.0.2'
+maintainer 'Dark Sky'
+maintainer_email 'jeff@darksky.net'
+version '1.0.0'
 
-source_url 'https://github.com/hw-cookbooks/chef-server-populator' if respond_to?(:source_url)
-issues_url 'https://github.com/hw-cookbooks/chef-server-populator/issues' if respond_to?(:issues_url)
+source_url 'https://github.com/darkskyapp/ds_chef_server_populator-cookbook' if respond_to?(:source_url)
+issues_url 'https://github.com/darkskyapp/ds_chef_server_populator-cookbook/issues' if respond_to?(:issues_url)
 
 depends 'chef-server', '~> 5.0'

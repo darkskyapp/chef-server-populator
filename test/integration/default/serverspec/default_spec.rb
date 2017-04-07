@@ -6,8 +6,8 @@ describe 'chef-server-default-org' do
   end
 end
 
-describe 'chef-server-populator-cookbook-upload' do
+describe 'ds_chef_server_populator-cookbook-upload' do
   describe command('knife cookbook list -c /etc/opscode/pivotal.rb') do
-    its(:stdout) { should match /chef-server-populator/ }
+    its(:stdout) { should match /ds_chef_server_populator/ }
   end
 end

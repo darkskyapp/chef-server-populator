@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'chef-server-populator::org' do
+describe 'ds_chef_server_populator::org' do
   let(:default_org) { 'nasa' }
 
   let(:test_org) do

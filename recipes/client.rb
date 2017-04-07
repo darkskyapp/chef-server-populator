@@ -1,4 +1,4 @@
-include_recipe 'chef-server-populator::configurator'
+include_recipe 'ds_chef_server_populator::configurator'
 
 knife_cmd = node['chef_server_populator']['knife_exec']
 knife_opts = '-c /etc/opscode/pivotal.rb'

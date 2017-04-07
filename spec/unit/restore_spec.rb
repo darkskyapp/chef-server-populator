@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'chef-server-populator::restore' do
+describe 'ds_chef_server_populator::restore' do
   let(:restore_path) { '/tmp/chef_restore' }
   let(:restore_lock) { '/etc/opscode/restore.json' }
   let(:db_restore_user) { 'opscode-pgsql' }

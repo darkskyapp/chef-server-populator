@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'chef-server-populator::solo' do
+describe 'ds_chef_server_populator::solo' do
   let(:server_org) { 'nasa' }
   let(:default_org) { 'endurance' }
   let(:base_path) { '/tmp/populator' }
@@ -60,7 +60,7 @@ describe 'chef-server-populator::solo' do
   end
 
   it 'includes the configurator recipe' do
-    expect(chef_run).to include_recipe('chef-server-populator::configurator')
+    expect(chef_run).to include_recipe('ds_chef_server_populator::configurator')
   end
 
   context 'without a default_org specified' do
@@ -75,7 +75,7 @@ describe 'chef-server-populator::solo' do
   end
 
   it 'includes the org recipe' do
-    expect(chef_run).to include_recipe('chef-server-populator::org')
+    expect(chef_run).to include_recipe('ds_chef_server_populator::org')
   end
 
   # The following tests cover behavior in the 'org' recipe. They are included in this spec
@@ -207,8 +207,8 @@ describe 'chef-server-populator::solo' do
     end
   end
 
-  it 'uploads the chef-server-populator cookbook to the new Chef server' do
-    expect(chef_run).to run_execute('install chef-server-populator cookbook').with(
+  it 'uploads the ds_chef_server_populator cookbook to the new Chef server' do
+    expect(chef_run).to run_execute('install ds_chef_server_populator cookbook').with(
       retries: 5
     )
   end

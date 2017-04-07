@@ -2,7 +2,7 @@ if node['chef_server_populator']['default_org'].nil?
   node.default['chef_server_populator']['default_org'] = node['chef_server_populator']['server_org']
 end
 
-include_recipe 'chef-server-populator::configurator'
+include_recipe 'ds_chef_server_populator::configurator'
 
 # if backup pull files include restore
 
@@ -44,9 +44,9 @@ if remote_conf['connection']
 end
 
 if local_gz && local_dump
-  include_recipe 'chef-server-populator::restore'
+  include_recipe 'ds_chef_server_populator::restore'
 else
-  include_recipe 'chef-server-populator::org'
+  include_recipe 'ds_chef_server_populator::org'
   orgs = node['chef_server_populator']['solo_org']
 
   orgs.each do |k, org|
@@ -89,8 +89,8 @@ else
                       raise 'The Chef::Config[:cookbook_path] is an invalid value'
                     end
 
-    execute "#{k} - install chef-server-populator cookbook" do
-      command "#{knife_cmd} cookbook upload chef-server-populator #{knife_opts} -o #{cookbook_path} --include-dependencies"
+    execute "#{k} - install ds_chef_server_populator cookbook" do
+      command "#{knife_cmd} cookbook upload ds_chef_server_populator #{knife_opts} -o #{cookbook_path} --include-dependencies"
       only_if do
         node['chef_server_populator']['cookbook_auto_install']
       end

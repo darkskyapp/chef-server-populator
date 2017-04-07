@@ -13,7 +13,7 @@ support, please pin your environment to version 0.4.0.
 
 **When bootstrapping with the `chef-server` cookbook and `chef-solo`:**
 
-* Download and unpack `chef-server`, `chef-server-ingredient`, and `chef-server-populator` cookbooks
+* Download and unpack `chef-server`, `chef-server-ingredient`, and `ds_chef_server_populator` cookbooks
 * Upload public keys to be used by users, org-validator, and clients (optionally)
 * Create JSON for organization, user, and (optionally) client(s)
 * Run `chef-solo`
@@ -58,7 +58,7 @@ User:
 
 Note: While users can belong to multiple organizations, and the above
 hash structure allows you to define multiple associations, the
-chef-server-populator currently only supports the first organization
+`ds_chef_server_populator` currently only supports the first organization
 that is defined in the data bag.
 
 Client:
@@ -110,7 +110,7 @@ the full name will be used, as the option is not parsed correctly
 
 **When enabling backups:**
 
-* Include `chef-server-populator::restore` recipe
+* Include `ds_chef_server_populator::restore` recipe
 * Set backup cron interval with `node['chef_server_populator']['schedule']`
 * Optionally set a remote storage location with `node['chef_server_populator']['backup']['remote']['connection']`
 * Backups include both a `pg_dump` of the entire chef database and a tarball of the Chef data directory
@@ -163,8 +163,3 @@ If the hash is non-empty, it will write the chef-server `dna.json` and trigger a
 Take a look in the `examples` directory for basic bootstrap templates that will
 build a new erchef server, using existing keys and client, and
 register itself, or restore an existing chef server from a backup.
-
-## Info
-
-* [Repository](https://github.com/hw-cookbooks/chef-server-populator)
-* IRC: Freenode @ `#heavywater`

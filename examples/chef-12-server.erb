@@ -68,7 +68,7 @@ echo "
     \"servername_override\": \"${IPADDR}\",
     \"base_path\": \"/tmp/chef-server-setup\"
   },
-  \"run_list\": [ \"recipe[chef-server-populator]\" ]
+  \"run_list\": [ \"recipe[ds_chef_server_populator]\" ]
 }
 "
 ) > /tmp/chef-server.json
@@ -99,7 +99,7 @@ echo "
   \"chef_server_populator\": {
     \"servername_override\": \"${IPADDR}\"
   },
-  \"run_list\": [ \"recipe[chef-server-populator]\"  ]
+  \"run_list\": [ \"recipe[ds_chef_server_populator]\"  ]
 }
 "
 ) > /etc/chef/first-boot.json

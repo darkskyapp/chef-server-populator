@@ -34,7 +34,7 @@ end
 file File.join(node['chef_server_populator']['configuration_directory'], 'backup.json') do
   content Chef::JSONCompat.to_json_pretty(
     node['chef_server_populator']['backup'].merge(
-      cookbook_version: node.run_context.cookbook_collection['chef-server-populator'].version
+      cookbook_version: node.run_context.cookbook_collection['ds_chef_server_populator'].version
     )
   )
   owner 'root'

@@ -2,7 +2,7 @@ require 'serverspec'
 
 set :backend, :exec
 
-describe 'chef-server-populator-configurator' do
+describe 'ds_chef_server_populator-configurator' do
   describe file('/etc/opscode/pivotal.rb') do
     it { should be_file }
   end

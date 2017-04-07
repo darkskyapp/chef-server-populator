@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'chef-server-populator::backups' do
+describe 'ds_chef_server_populator::backups' do
   let(:data_dir) { '/tmp/chef-backups' }
   let(:config_dir) { '/etc/populator/config' }
   let(:backup_script) { '/usr/local/bin/chef-server-backup' }

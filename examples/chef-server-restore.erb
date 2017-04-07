@@ -1,8 +1,8 @@
 ##### Example bootstrap template #####
-# This bootstrap will create a new erchef server and restore it using 
+# This bootstrap will create a new erchef server and restore it using
 # a backup of your existing chef server. It will automatically
-# disable the webui, restore the entire chef database, and reset the public 
-# key for the local admin user. It will also restore all the cookbooks 
+# disable the webui, restore the entire chef database, and reset the public
+# key for the local admin user. It will also restore all the cookbooks
 # from the previous/existing chef server, so all cookbook versions will be
 # available. Finally, it will register itself with itself. How meta.
 #
@@ -70,7 +70,7 @@ echo "
     \"servername_override\": \"${IPADDR}\",
     \"base_path\": \"/tmp/chef-server-setup\"
   },
-  \"run_list\": [ \"recipe[chef-server]\", \"recipe[chef-server-populator]\" ]
+  \"run_list\": [ \"recipe[chef-server]\", \"recipe[ds_chef_server_populator]\" ]
 }
 "
 ) > /tmp/chef-server.json
@@ -105,7 +105,7 @@ echo "
   \"chef_server_populator\": {
     \"servername_override\": \"${IPADDR}\"
   },
-  \"run_list\": [ \"recipe[chef-server-populator]\"  ]
+  \"run_list\": [ \"recipe[ds_chef_server_populator]\"  ]
 }
 "
 ) > /etc/chef/first-boot.json

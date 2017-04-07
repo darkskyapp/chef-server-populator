@@ -1,6 +1,18 @@
-# chef-server-populator CHANGELOG
+# ds_chef_server_populator CHANGELOG
 
 ## Unreleased changes
+
+## v1.0.0
+
+* Rename cookbook to reflect its forked status
+* Refactor backup & restore functionality to use the AWS SDK for Ruby (and just the S3 portion, for lighter weight)
+* Fix setting of `cookbook_path` for `knife` commands
+* Fixup some ChefSpec tests to actually run, if not pass
+* General cleanup everywhere in the cookbook
+
+---
+
+# chef-server-populator CHANGELOG
 
 ## v2.0.2
 * Configure $PATH to fix backups unit test

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'chef-server-populator::configurator' do
+describe 'ds_chef_server_populator::configurator' do
   let(:fqdn) { 'amazing-chef-server.example.com' }
   let(:endpoint) { 'amazing-chef-816064413.us-west-1.elb.amazonaws.com' }
 
