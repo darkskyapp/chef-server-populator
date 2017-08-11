@@ -2,6 +2,11 @@
 
 ## Unreleased changes
 
+## v1.2.0
+
+* Add attributes to trigger Consul monitoring
+* Add attribute to tag `role` in Datadog
+
 ## v1.1.0
 
 * Set FQDN to `chef.darksky.net` to standardize on the real hostname
