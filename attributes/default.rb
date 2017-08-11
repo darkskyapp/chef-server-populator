@@ -1,3 +1,5 @@
+override['set_fqdn'] = 'chef.darksky.net'
+
 default['chef_server_populator']['configuration_directory'] = '/etc/chef-server/populator'
 default['chef_server_populator']['base_path'] = '/tmp/chef-server-populator'
 default['chef_server_populator']['clients'] = {}
