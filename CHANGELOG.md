@@ -2,6 +2,10 @@
 
 ## Unreleased changes
 
+## v1.1.0
+
+* Set FQDN to `chef.darksky.net` to standardize on the real hostname
+
 ## v1.0.0
 
 * Rename cookbook to reflect its forked status
