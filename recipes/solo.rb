@@ -27,8 +27,8 @@ if remote_conf['connection']
     gz_file.get response_target: local_gz
     dump_file.get response_target: local_dump
 
-    node.default['chef_server_populator']['restore']['file'] = local_dump
-    node.default['chef_server_populator']['restore']['data'] = local_gz
+    node.normal['chef_server_populator']['restore']['file'] = local_dump
+    node.normal['chef_server_populator']['restore']['data'] = local_gz
   rescue Aws::S3::Errors::NoSuchBucket => e
     Chef::Log.fatal e.message
   rescue Aws::S3::Errors::NoSuchKey => e
