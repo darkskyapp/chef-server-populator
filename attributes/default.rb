@@ -18,6 +18,10 @@ default['chef_server_populator']['servername_override'] = nil
 # annoying frequency
 default['chef_server_populator']['chef_server']['configuration']['opscode_erchef']['s3_url_ttl'] = 3600
 
+# This setting allows the Chef Server to be fronted by an ELB terminating SSL
+# This allows the ELB to communicate via HTTP to the Chef Server
+default['chef_server_populator']['chef_server']['configuration']['nginx']['enable_non_ssl'] = true
+
 default['chef_server_populator']['cookbook_auto_install'] = true
 
 default['chef_server_populator']['restore']['file'] = ''
