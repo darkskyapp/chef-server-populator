@@ -47,9 +47,15 @@ template '/usr/local/bin/chef-server-backup' do
   retries 3
 end
 
+execute 'install chef_server_backup gems' do
+  command 'bundle install --path /etc/opscode/.vendor'
+  environment BUNDLE_GEMFILE: '/etc/opscode/Gemfile'
+  path '/opt/chef/embedded/bin:/usr/bin:/usr/local/bin:/bin'
+  creates '/etc/opscode/.vendor'
+end
+
 cron 'Chef Server Backups' do
-  command 'bundle install --path /etc/opscode/.vendor && '\
-          'bundle exec /usr/local/bin/chef-server-backup'
+  command 'bundle exec /usr/local/bin/chef-server-backup'
   node['chef_server_populator']['backup']['schedule'].each do |k, v|
     send(k, v)
   end
