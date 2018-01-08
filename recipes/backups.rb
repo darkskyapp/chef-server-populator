@@ -55,6 +55,13 @@ execute 'install chef_server_backup gems' do
 end
 
 cron 'Chef Server Backups' do
+  action :delete
+end
+
+include_recipe 'cronner'
+
+cronner 'chef_server_backup' do
+  event true
   command 'bundle exec /usr/local/bin/chef-server-backup'
   node['chef_server_populator']['backup']['schedule'].each do |k, v|
     send(k, v)
