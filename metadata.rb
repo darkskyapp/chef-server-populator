@@ -8,4 +8,4 @@ source_url 'https://github.com/darkskyapp/ds_chef_server_populator-cookbook' if 
 issues_url 'https://github.com/darkskyapp/ds_chef_server_populator-cookbook/issues' if respond_to?(:issues_url)
 
 depends 'chef-server', '~> 5.0'
-depends 'cronner'
+depends 'ds_cronner', '~> 1.0'
