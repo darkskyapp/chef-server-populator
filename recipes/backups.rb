@@ -58,8 +58,6 @@ cron 'Chef Server Backups' do
   action :delete
 end
 
-include_recipe 'cronner'
-
 cronner 'chef_server_backup' do
   event true
   command 'bundle exec /usr/local/bin/chef-server-backup'
