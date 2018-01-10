@@ -49,8 +49,8 @@ end
 
 execute 'install chef_server_backup gems' do
   command 'bundle install --path /etc/opscode/.vendor'
-  environment BUNDLE_GEMFILE: '/etc/opscode/Gemfile'
-  path '/opt/chef/embedded/bin:/usr/bin:/usr/local/bin:/bin'
+  environment BUNDLE_GEMFILE: '/etc/opscode/Gemfile',
+              PATH: '/opt/chef/embedded/bin:/usr/bin:/usr/local/bin:/bin'
   creates '/etc/opscode/.vendor'
 end
 
