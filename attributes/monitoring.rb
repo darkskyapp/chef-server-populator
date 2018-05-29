@@ -11,4 +11,4 @@ node.override['ds_consul']['definitions']['chef-server'] = {
   },
 }
 
-override['datadog']['tags']['role'] = 'chef-server'
+override['datadog']['tags']['service'] = 'chef-server'
