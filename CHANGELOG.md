@@ -2,6 +2,11 @@
 
 ## Unreleased changes
 
+## v1.3.3
+
+* Drop installation of unnecessary Fog deps
+* Clean up Datadog tagging
+
 ## v1.3.2
 
 * Drop using deprecated property for `execute`
