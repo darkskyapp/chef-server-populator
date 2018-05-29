@@ -14,17 +14,6 @@ directory node['chef_server_populator']['backup']['dir'] do
 end
 
 # Upload to Remote Storage
-# Include fog
-case node['platform_family']
-when 'debian'
-  packages = %w(gcc libxml2 libxml2-dev libxslt-dev)
-when 'rhel'
-  packages = %w(gcc libxml2 libxml2-devel libxslt libxslt-devel patch)
-end
-packages.each do |fog_dep|
-  package fog_dep
-end
-
 directory node['chef_server_populator']['configuration_directory'] do
   recursive true
   owner 'root'
