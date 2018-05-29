@@ -2,6 +2,20 @@
 
 ## Unreleased changes
 
+## v1.3.2
+
+* Drop using deprecated property for `execute`
+* Drop unnecessary recipe inclusion
+
+## v1.3.1
+
+* Switch to our fork of cronner
+
+## v1.3.0
+
+* Break out backup gem install to its own resource
+* Use cronner to monitor backups
+
 ## v1.2.0
 
 * Add attributes to trigger Consul monitoring
