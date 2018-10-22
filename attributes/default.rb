@@ -1,3 +1,5 @@
+default['chef-server']['accept_license'] = true
+
 override['set_fqdn'] = 'chef.darksky.net'
 
 default['chef_server_populator']['configuration_directory'] = '/etc/chef-server/populator'
