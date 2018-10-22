@@ -1,4 +1,4 @@
-node.override['ds_consul']['definitions']['chef-server'] = {
+override['ds_consul']['definitions']['chef-server'] = {
   type: 'service',
   parameters: {
     port: 80,
