@@ -2,6 +2,10 @@
 
 ## Unreleased changes
 
+## v1.3.5
+
+* Ensure admin users can be automatically removed from an organization
+
 ## v1.3.3
 
 * Drop installation of unnecessary Fog deps
