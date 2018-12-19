@@ -69,7 +69,7 @@ if node['chef_server_populator']['databag']
 
         if item['enabled'] == false
           execute "#{orgname} - remove user: #{item['client']}" do
-            command "chef-server-ctl org-user-remove #{orgname} #{item['client']}"
+            command "chef-server-ctl org-user-remove #{orgname} #{item['client']} --force"
           end
 
           execute "#{orgname} - delete user: #{item['client']}" do
